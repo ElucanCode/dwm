@@ -12,6 +12,7 @@ My personal build of dwm.
 - [viewontag](https://dwm.suckless.org/patches/viewontag/)
 - [shiftview](https://lists.suckless.org/dev/1104/7590.html)
 - [restartsig](https://dwm.suckless.org/patches/restartsig/)
+- [resizecorners](https://dwm.suckless.org/patches/resizecorners)
 
 ## Dependencies
 ### Fonts
