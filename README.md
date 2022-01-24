@@ -13,6 +13,7 @@ My personal build of dwm.
 - [shiftview](https://lists.suckless.org/dev/1104/7590.html)
 - [restartsig](https://dwm.suckless.org/patches/restartsig/)
 - [resizecorners](https://dwm.suckless.org/patches/resizecorners)
+- [multipledynamicscratchpads](https://dwm.suckless.org/patches/multipledynamicscratchpads)
 
 ## Dependencies
 ### Fonts
@@ -83,3 +84,14 @@ Super+h                | decrease master size
 Super+l                | increase master size
 Super+d                | decrease number of windows on master
 Super+i                | increase number of windows on master
+
+### Scratchpads
+keybinding             | functionality
+-----------------------|---------------
+Super+a                | show first scratchpad
+Super+y                | show second scratchpad
+Super+x                | show third scratchpad
+Super+Shift+a          | set active window as first scratchpad
+Super+Shift+y          | set active window as second scratchpad
+Super+Shift+x          | set active window as third scratchpad
+Super+Shift+r          | turn currently active scratchpad in normal window

@@ -222,6 +222,11 @@ static void resizerequest(XEvent *e);
 static void restack(Monitor *m);
 static void run(void);
 static void scan(void);
+static void scratchpad_hide();
+static void scratchpad_remove();
+static void scratchpad_show();
+static void scratchpad_show_client(Client *c);
+static void scratchpad_show_first(int scratchNum);
 static int sendevent(Window w, Atom proto, int m, long d0, long d1, long d2, long d3, long d4);
 static void sendmon(Client *c, Monitor *m);
 static void setclientstate(Client *c, long state);
@@ -315,11 +320,19 @@ static Window root, wmcheckwin;
 static int lastchosentag[8];
 static int previouschosentag[8];
 
+/* scratchpad */
+#define SCRATCHPAD_MASK_1 512
+#define SCRATCHPAD_MASK_2 1024
+#define SCRATCHPAD_MASK_3 2048
+static int scratchpad_hide_flag = 0;
+static Client *scratchpad_last_showed_1 = NULL;
+static Client *scratchpad_last_showed_2 = NULL;
+static Client *scratchpad_last_showed_3 = NULL;
 /* configuration, allows nested code to access above variables */
 #include "config.h"
 
 /* compile-time check if all tags fit into an unsigned int bit array. */
-struct NumTags { char limitexceeded[LENGTH(tags) > 31 ? -1 : 1]; };
+struct NumTags { char limitexceeded[LENGTH(tags) > 30 ? -1 : 1]; };
 
 /* dwm will keep pid's of processes from autostart array and kill them at quit */
 static pid_t *autostart_pids;
@@ -383,7 +396,9 @@ applyrules(Client *c)
 		XFree(ch.res_class);
 	if (ch.res_name)
 		XFree(ch.res_name);
+    if(c->tags != SCRATCHPAD_MASK_1 && c->tags != SCRATCHPAD_MASK_2 && c->tags != SCRATCHPAD_MASK_3) {
 	c->tags = c->tags & TAGMASK ? c->tags & TAGMASK : c->mon->tagset[c->mon->seltags];
+    }
 }
 
 int
@@ -1664,6 +1679,121 @@ scan(void)
 	}
 }
 
+static void scratchpad_hide(const Arg *arg) {
+    if(scratchpad_hide_flag < 4) {
+        if(arg->i == 1) {
+            if(selmon->sel) {
+                selmon->sel->tags = SCRATCHPAD_MASK_1;
+                selmon->sel->isfloating = 1;
+                focus(NULL);
+                arrange(selmon);
+                scratchpad_hide_flag++;
+            }
+        }
+        else if(arg->i == 2) {
+            if(selmon->sel) {
+                selmon->sel->tags = SCRATCHPAD_MASK_2;
+                selmon->sel->isfloating = 1;
+                focus(NULL);
+                arrange(selmon);
+                scratchpad_hide_flag++;
+            }
+        }
+        else if(arg->i == 3) {
+            if(selmon->sel) {
+                selmon->sel->tags = SCRATCHPAD_MASK_3;
+                selmon->sel->isfloating = 1;
+                focus(NULL);
+                arrange(selmon);
+                scratchpad_hide_flag++;
+            }
+        }
+    }
+}
+
+static void scratchpad_remove() {
+    if(selmon->sel && (scratchpad_last_showed_1 != NULL || scratchpad_last_showed_2 != NULL ||scratchpad_last_showed_3 != NULL) && (selmon->sel == scratchpad_last_showed_1 || selmon->sel == scratchpad_last_showed_2 || selmon->sel == scratchpad_last_showed_3))  {
+        if(scratchpad_last_showed_1 == selmon->sel) {
+            scratchpad_last_showed_1 = NULL;
+        }
+        else if(scratchpad_last_showed_2 == selmon->sel) {
+            scratchpad_last_showed_2 = NULL;
+        }
+        else if(scratchpad_last_showed_3 == selmon->sel) {
+            scratchpad_last_showed_3 = NULL;
+        }
+    }
+}
+
+static void scratchpad_show(const Arg *arg) {
+    if(arg->i == 1) {
+        if(scratchpad_last_showed_1 == NULL) {
+            scratchpad_show_first(arg->i);
+        }
+        else {
+            if(scratchpad_last_showed_1->tags != SCRATCHPAD_MASK_1) {
+                scratchpad_last_showed_1->tags = SCRATCHPAD_MASK_1;
+                focus(NULL);
+                arrange(selmon);
+            }
+            else {
+                scratchpad_show_first(arg->i);
+            }
+        }
+    }
+    else if(arg->i == 2) {
+        if(scratchpad_last_showed_2 == NULL) {
+            scratchpad_show_first(arg->i);
+        }
+        else {
+            if(scratchpad_last_showed_2->tags != SCRATCHPAD_MASK_2) {
+                scratchpad_last_showed_2->tags = SCRATCHPAD_MASK_2;
+                focus(NULL);
+                arrange(selmon);
+            }
+            else {
+                scratchpad_show_first(arg->i);
+            }
+        }
+    }
+    else if(arg->i == 3) {
+        if(scratchpad_last_showed_3 == NULL) {
+            scratchpad_show_first(arg->i);
+        }
+        else {
+            if(scratchpad_last_showed_3->tags != SCRATCHPAD_MASK_3) {
+                scratchpad_last_showed_3->tags = SCRATCHPAD_MASK_3;
+                focus(NULL);
+                arrange(selmon);
+            }
+            else {
+                scratchpad_show_first(arg->i);
+            }
+        }
+    }
+}
+
+static void scratchpad_show_client(Client *c) {
+    c->tags = selmon->tagset[selmon->seltags];
+    focus(c);
+    arrange(selmon);
+}
+
+static void scratchpad_show_first(int scratchNum) {
+    for(Client *c = selmon->clients; c !=NULL; c = c->next) {
+        if(c->tags == SCRATCHPAD_MASK_1 && scratchNum == 1) {
+            scratchpad_last_showed_1 = c;
+            scratchpad_show_client(c);
+        } else if(c->tags == SCRATCHPAD_MASK_2 && scratchNum == 2) {
+            scratchpad_last_showed_2 = c;
+            scratchpad_show_client(c);
+        } else if(c->tags == SCRATCHPAD_MASK_3 && scratchNum == 3) {
+            scratchpad_last_showed_3 = c;
+            scratchpad_show_client(c);
+        }
+    }
+}
+
 void
 sendmon(Client *c, Monitor *m)
 {
@@ -2147,6 +2277,16 @@ unmanage(Client *c, int destroyed)
 		XSetErrorHandler(xerror);
 		XUngrabServer(dpy);
 	}
+    if(scratchpad_last_showed_1 == c) {
+        scratchpad_last_showed_1 = NULL;
+    }
+    if(scratchpad_last_showed_2 == c) {
+        scratchpad_last_showed_2 = NULL; 
+    }
+    if(scratchpad_last_showed_3 == c) {
+        scratchpad_last_showed_3 = NULL;
+    }
+
 	free(c);
 	focus(NULL);
 	updateclientlist();

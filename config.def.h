@@ -138,6 +138,13 @@ static Key keys[] = {
 /*	{ MODKEY|ShiftMask,             XK_equal,  setgaps,        {.i = 0  } },*/
 	{ MODKEY,                       XK_n,      shiftview,      {.i = 1  } },
 	{ MODKEY,                       XK_p,      shiftview,      {.i = -1 } },
+	{ MODKEY,                       XK_a,      scratchpad_show, {.i = 1} },
+	{ MODKEY,                       XK_y,      scratchpad_show, {.i = 2} },
+	{ MODKEY,                       XK_x,      scratchpad_show, {.i = 3} },
+	{ MODKEY|ShiftMask,             XK_a,      scratchpad_hide, {.i = 1} },
+	{ MODKEY|ShiftMask,             XK_y,      scratchpad_hide, {.i = 2} },
+	{ MODKEY|ShiftMask,             XK_x,      scratchpad_hide, {.i = 3} },
+	{ MODKEY|ShiftMask,             XK_r,      scratchpad_remove, { 0 } },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
