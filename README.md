@@ -11,6 +11,7 @@ My personal build of dwm.
 - [systray](https://dwm.suckless.org/patches/systray/)
 - [viewontag](https://dwm.suckless.org/patches/viewontag/)
 - [shiftview](https://lists.suckless.org/dev/1104/7590.html)
+- [restartsig](https://dwm.suckless.org/patches/restartsig/)
 
 ## Dependencies
 ### Fonts
@@ -36,7 +37,8 @@ All programs listed here are optional and can be replaced by any other program. 
 ### Navigation
 keybinding             | functionality
 -----------------------|---------------
-Super+Shift+Control+q  | quit
+Super+Shift+Control+q  | quit dwm
+Super+Shift+Control+r  | restart dwm
 Super+b                | toggle bar
 Super+[Number]         | go to the tag with that number
 Super+Shift+[Number]   | move active window and focus to the tag with that number
