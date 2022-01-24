@@ -19,16 +19,16 @@ My personal build of dwm.
 
 ### Applications
 All programs listed here are optional and can be replaced by any other program. They are only needed if you want to use my build of dwm as it is.
-#### automatically started
+#### Automatically started
 - Nitrogen
 - Alacritty
-#### default tag applications
+#### Default tag applications
 - Alacritty
 - Firefox
 - Pcmanfm
 - Thunderbird
 - Torbrowser
-### keybindings
+#### Keybindings
 - Alacritty
 - Dmenu
 
