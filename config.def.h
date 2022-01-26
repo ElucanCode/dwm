@@ -61,10 +61,10 @@ static const Rule rules[] = {
 	/* class         instance    title     tags mask     floating   monitor */
 	{ "Alacritty",   NULL,       NULL,     1,            0,         -1 },
 	{ "firefox",     NULL,       NULL,     1 << 1,       0,         -1 },
-	{ "ranger",      NULL,       NULL,     1 << 3,       0,         -1 },
-	{ "pcmanfm",     NULL,       NULL,     1 << 3,       0,         -1 },
-	{ "Thunderbird", NULL,       NULL,     1 << 4,       0,         -1 },
-	{ "Tor Browser", NULL,       NULL,     1 << 6,       0,         -1 },
+	{ "ranger",      NULL,       NULL,     1 << 2,       0,         -1 },
+	{ "pcmanfm",     NULL,       NULL,     1 << 2,       0,         -1 },
+	{ "Thunderbird", NULL,       NULL,     1 << 3,       0,         -1 },
+	{ "Tor Browser", NULL,       NULL,     1 << 4,       0,         -1 },
 };
 
 /* layout(s) */
